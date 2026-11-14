@@ -63,7 +63,7 @@ These semantics follow the [Faiss metric guide](https://github.com/facebookresea
 
 - Successful searches print JSON to stdout and exit `0`. Results include metric, score meaning, corpus size, requested `k`, and returned count.
 - Invalid inputs exit `2` with a JSON error on stderr; argument-parser usage errors also exit `2`. No partial search results are emitted.
-- Each JSON file is limited to 8 MiB. UTF-8 (with an optional BOM) is accepted; duplicate keys, non-finite values, excessive nesting, malformed matrices, and mismatched dimensions are rejected.
+- Each JSON file is limited to 8 MiB and 64 nesting levels. UTF-8 (with an optional BOM) is accepted; duplicate keys, non-finite values, excessive nesting, malformed matrices, and mismatched dimensions are rejected.
 - `k` must be a positive integer. If it is larger than the corpus, each query returns the entire corpus, without Faiss's `-1` padding accidentally mapping to the last document.
 
 ## Development

@@ -7,7 +7,7 @@ import unittest
 
 import numpy as np
 
-from search import MAX_JSON_BYTES, read_json, run
+from search import MAX_JSON_BYTES, MAX_JSON_DEPTH, read_json, run
 from vector_search import VectorIndex
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -174,6 +174,18 @@ class CliTests(unittest.TestCase):
                 path.write_text("[[" + number + "]]", encoding="utf-8")
                 with self.subTest(number=number), self.assertRaisesRegex(ValueError, "finite"):
                     read_json(path)
+
+    def test_explicit_depth_limit_ignores_brackets_in_strings(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "input.json"
+            value = {"text": '\\"' + '[' * 200 + '\\"' + ']' * 200}
+            path.write_text(json.dumps(value), encoding="utf-8")
+            self.assertEqual(read_json(path), value)
+            path.write_text('[' * MAX_JSON_DEPTH + '0' + ']' * MAX_JSON_DEPTH, encoding="utf-8")
+            self.assertIsInstance(read_json(path), list)
+            path.write_text('[' * (MAX_JSON_DEPTH + 1) + '0' + ']' * (MAX_JSON_DEPTH + 1), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "64-level"):
+                read_json(path)
 
 
 if __name__ == "__main__":

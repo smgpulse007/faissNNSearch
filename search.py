@@ -10,6 +10,7 @@ import sys
 from vector_search import METRICS, VectorIndex
 
 MAX_JSON_BYTES = 8 * 1024 * 1024
+MAX_JSON_DEPTH = 64
 
 
 def _object(pairs):
@@ -32,13 +33,37 @@ def _float(value):
     return number
 
 
+def _check_depth(text: str):
+    # Bound structure before parsing; Python versions have different recursion
+    # limits. Brackets inside strings (including escaped quotes) are just data.
+    depth, quoted, escaped = 0, False, False
+    for char in text:
+        if quoted:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                quoted = False
+        elif char == '"':
+            quoted = True
+        elif char in "[{":
+            depth += 1
+            if depth > MAX_JSON_DEPTH:
+                raise ValueError("JSON nesting exceeds the 64-level limit")
+        elif char in "]}":
+            depth -= 1
+
+
 def read_json(path: Path):
     with path.open("rb") as source:
         data = source.read(MAX_JSON_BYTES + 1)
     if len(data) > MAX_JSON_BYTES:
         raise ValueError("input JSON exceeds the 8 MiB limit")
     try:
-        return json.loads(data.decode("utf-8-sig"), object_pairs_hook=_object,
+        text = data.decode("utf-8-sig")
+        _check_depth(text)
+        return json.loads(text, object_pairs_hook=_object,
                           parse_constant=_constant, parse_float=_float)
     except (UnicodeDecodeError, json.JSONDecodeError, RecursionError) as exc:
         raise ValueError("input must be valid UTF-8 JSON with bounded nesting") from exc
