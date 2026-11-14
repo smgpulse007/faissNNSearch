@@ -186,6 +186,13 @@ class CliTests(unittest.TestCase):
             path.write_text('[' * (MAX_JSON_DEPTH + 1) + '0' + ']' * (MAX_JSON_DEPTH + 1), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "64-level"):
                 read_json(path)
+            for opening, closing, levels in (('{"a":', '}', 1), ('[{"a":', '}]', 2)):
+                count = MAX_JSON_DEPTH // levels
+                path.write_text(opening * count + '0' + closing * count, encoding="utf-8")
+                self.assertIsInstance(read_json(path), (list, dict))
+                path.write_text(opening * (count + 1) + '0' + closing * (count + 1), encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "64-level"):
+                    read_json(path)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 {
-  "recorded_utc": "2026-11-14T06:40:59.467443+00:00",
+  "recorded_utc": "2026-11-14T06:45:08.292443+00:00",
   "kind": "animation_rendered_from_actual_command_output",
   "pillow_version": "13.0.0",
   "text_hash_normalization": "UTF-8 text with CRLF normalized to LF",
@@ -7,7 +7,7 @@
     "vector_search.py": "889a205c01b732dd33ccf357d798c0536b0ed7faf9465f4e16994f10a35372f9",
     "search.py": "20b7a5577dcf2a799e21428177054629d8b68ba4cb1cbff22492ef028178b704",
     "demo.py": "c2f0edf0a1e0cf144c2603e3cbc9eb2f4f52b0efbbb8d7e566cbb6cbe4494dfd",
-    "tests/test_search.py": "93761f2bc0da73f2bbe26d2036096a5967810a19a997bceffabc85321e3fa39f",
+    "tests/test_search.py": "079f54a77173e8d79b0e77ab1612ea04d6eab9e6710dc3cd455e4612dffb4a72",
     "examples/vectors.json": "d5d217fccbf1cd2ec01e38ac1cb81c4ea6b9bd6bb42856242f46100246880a5c",
     "examples/queries.json": "399d26011afca5ee2397863ad7290d7cd41f81a92f7547f943f7eb38c8914054",
     "requirements.txt": "ff01eee8d15e60832537f2c750984a5c25905e7a2fc8a8bb60e6e56d2cf5ffb2",
@@ -22,7 +22,7 @@
     {
       "command": "python -m unittest discover -s tests",
       "exit_code": 0,
-      "output": "......................\n----------------------------------------------------------------------\nRan 22 tests in 0.517s\n\nOK\n"
+      "output": "......................\n----------------------------------------------------------------------\nRan 22 tests in 0.546s\n\nOK\n"
     }
   ]
 }
