@@ -1,0 +1,4 @@
+{
+  "ids": ["same-direction", "nearby-point", "other-direction"],
+  "vectors": [[10, 0], [1, 0.2], [0, 1]]
+}
